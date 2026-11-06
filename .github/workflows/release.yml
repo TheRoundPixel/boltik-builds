@@ -1,0 +1,18 @@
+name: Релиз APK
+on:
+  push:
+    branches: [main]
+    paths: [boltik.apk]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest -y --cleanup-tag || true
+          gh release create latest boltik.apk --title "Болтик — свежая сборка" --notes "Нажми boltik.apk, чтобы скачать. Отладочная сборка для Android."
